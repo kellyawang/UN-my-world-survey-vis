@@ -58,8 +58,8 @@ function createVis(error, perDayData, metaData){
 	//  pass event handler to CountVis, at constructor of CountVis above
 
 	// *** TO-DO ***
-    //var ageVis = new AgeVis("agevis", allData);
-	//var prioVis =
+    var ageVis = new AgeVis("agevis", allData);
+	var prioVis = new PrioVis("priovis", allData, metaData);
 
 
 	// (5) Bind event handler

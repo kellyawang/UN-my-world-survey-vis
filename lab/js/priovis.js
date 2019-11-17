@@ -45,7 +45,8 @@ PrioVis.prototype.initVis = function(){
         .range([vis.height,0]);
 
     vis.xAxis = d3.axisBottom()
-        .scale(vis.x);
+        .scale(vis.x)
+        .tickFormat(p => `${vis.metaData.priorities[p]['item-title']}`);
 
     vis.yAxis = d3.axisLeft()
         .scale(vis.y);
@@ -79,10 +80,21 @@ PrioVis.prototype.wrangleData = function(){
     var votesPerPriority = [];
 
 	// Create a sequence from 0 - 14 (priorities: 1-15; array length: 15), initialize values to 0
-	// var votesPerPriority = ...
+    var votesPerPriority = d3.range(0, 15).map(() => 0);
+    console.log("votes per priority:")
+    console.log(votesPerPriority)
 
 	// Aggregate over priorities, iterate over all data
-	// ...
+    console.log("filteredData:")
+    console.log( vis.filteredData );
+    vis.filteredData.forEach(function(day) {
+        d3.range(0,15).forEach(function(i) {
+            votesPerPriority[i] += day.priorities[i]
+        })
+    });
+
+    console.log("votes per priority:")
+    console.log( votesPerPriority );
 
     vis.displayData = votesPerPriority;
 
@@ -126,7 +138,9 @@ PrioVis.prototype.updateVis = function(){
     // Call axis function with the new domain
     vis.svg.select(".y-axis").call(vis.yAxis);
 
-    // TODO: adjust axis labels
+    console.log("vis metadata")
+    console.log(vis.metaData.priorities[0])
+
     vis.svg.select(".x-axis").call(vis.xAxis)
         .selectAll("text")
         .style("text-anchor", "end")
