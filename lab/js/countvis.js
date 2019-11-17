@@ -8,7 +8,7 @@
 CountVis = function(_parentElement, _data, _eventHandler ){
 	this.parentElement = _parentElement;
 	this.data = _data;
-    //this.eventHandler =
+    this.eventHandler = _eventHandler;
 
 	this.initVis();
 }
@@ -87,15 +87,31 @@ CountVis.prototype.initVis = function(){
         .y0(vis.height)
         .y1(function(d) { return vis.y(d.count); });
 
+    // Initialize timeline labels
+	d3.select("#timeLabel-min").text(dateFormatter(vis.x.domain()[0]));
+	d3.select("#timeLabel-max").text(dateFormatter(vis.x.domain()[1]));
 
 	// Initialize brushing component
 	// *** TO-DO ***
-	// vis.currentBrushRegion = null;
-	// vis.brush =
+	vis.currentBrushRegion = null;
+	vis.brush = d3.brushX()
+		.extent([ [0,0], [vis.width, vis.height] ])
+		.on("brush", function() {
+			// we brush on time scale
+			// current brushed region is an array of current x values selected from [0...vis.width, 0...vis.height]
+			// translate it to Dates using the vis.x scale
+			// invert() function returns the corresponding domain value of the x scale (Date) given a value from the range
+			vis.currentBrushRegion = d3.event.selection;
+			console.log(vis.currentBrushRegion);
+			vis.currentBrushRegion = vis.currentBrushRegion.map(vis.x.invert);
+
+			// Trigger the event 'selectionChanged' of our event handler
+			$(vis.eventHandler).trigger("selectionChanged", vis.currentBrushRegion);
+		})
 
 	// Append brush component here
-	// *** TO-DO ***
-	// vis.brushGroup =
+	vis.brushGroup = vis.svg.append("g")
+		.attr("class", "brush")
 
 	// Add zoom component
 	// *** TO-DO ***
@@ -142,9 +158,7 @@ CountVis.prototype.updateVis = function(){
 	var vis = this;
 
 	// Call brush component here
-	// *** TO-DO ***
-	// vis.brushGroup.call(...
-
+	vis.brushGroup.call(vis.brush);
 
 	// Call the area function and update the path
 	// D3 uses each data point and passes it to the area function.
@@ -158,4 +172,12 @@ CountVis.prototype.updateVis = function(){
 	// Call axis functions with the new domain 
 	vis.svg.select(".x-axis").call(vis.xAxis);
 	vis.svg.select(".y-axis").call(vis.yAxis);
+}
+
+CountVis.prototype.onSelectionChange = function(selectionStart, selectionEnd) {
+	var vis = this;
+	console.log("vis x domain:")
+	console.log(vis.x.domain())
+	d3.select("#timeLabel-min").text(dateFormatter(selectionStart));
+	d3.select("#timeLabel-max").text(dateFormatter(selectionEnd));
 }

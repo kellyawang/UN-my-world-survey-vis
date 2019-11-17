@@ -18,7 +18,7 @@ h2 {
 }
 
 .brush {
-	fill: #ccc;
+	/*fill: #ccc;*/
 	fill-opacity: .5;
 	pointer-events: none;
 }
@@ -50,4 +50,10 @@ h2 {
 
 .bar {
 	fill: #93bebf;
+}
+
+.timeLabel {
+	padding: 0px 10px;
+	text-decoration: underline;
+	text-decoration-color: #825a5a;
 }

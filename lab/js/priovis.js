@@ -81,20 +81,20 @@ PrioVis.prototype.wrangleData = function(){
 
 	// Create a sequence from 0 - 14 (priorities: 1-15; array length: 15), initialize values to 0
     var votesPerPriority = d3.range(0, 15).map(() => 0);
-    console.log("votes per priority:")
-    console.log(votesPerPriority)
+    // console.log("votes per priority:")
+    // console.log(votesPerPriority)
 
 	// Aggregate over priorities, iterate over all data
-    console.log("filteredData:")
-    console.log( vis.filteredData );
+    // console.log("priovis filteredData:")
+    // console.log( vis.filteredData );
     vis.filteredData.forEach(function(day) {
         d3.range(0,15).forEach(function(i) {
             votesPerPriority[i] += day.priorities[i]
         })
     });
 
-    console.log("votes per priority:")
-    console.log( votesPerPriority );
+    // console.log("votes per priority:")
+    // console.log( votesPerPriority );
 
     vis.displayData = votesPerPriority;
 
@@ -138,8 +138,8 @@ PrioVis.prototype.updateVis = function(){
     // Call axis function with the new domain
     vis.svg.select(".y-axis").call(vis.yAxis);
 
-    console.log("vis metadata")
-    console.log(vis.metaData.priorities[0])
+    // console.log("vis metadata")
+    // console.log(vis.metaData.priorities[0])
 
     vis.svg.select(".x-axis").call(vis.xAxis)
         .selectAll("text")
@@ -157,11 +157,12 @@ PrioVis.prototype.updateVis = function(){
 PrioVis.prototype.onSelectionChange = function(selectionStart, selectionEnd){
 	var vis = this;
 
-
     // Filter original unfiltered data depending on selected time period (brush)
+    console.log("selection Start: " + selectionStart);
+    console.log("selection End: " + selectionEnd);
 
     // *** TO-DO ***
-    //vis.filteredData = ...
+    vis.filteredData = vis.data
 
     vis.filteredData = vis.data.filter(function(d){
         return d.time >= selectionStart && d.time <= selectionEnd;

@@ -49,15 +49,16 @@ function createVis(error, perDayData, metaData){
 	console.log(allData)
 
 	// (3) Create event handler
-	// *** TO-DO ***
+	var eventHandler = {};
 
 	// (4) Create visualization instances
-	var countVis = new CountVis("countvis", allData);
+	// "Context" visualization
+	var countVis = new CountVis("countvis", allData, eventHandler);
 
 	// *** TO-DO ***
 	//  pass event handler to CountVis, at constructor of CountVis above
 
-	// *** TO-DO ***
+	// "Focus" visualizations - visualizations that should respond following changes in the Context vis
     var ageVis = new AgeVis("agevis", allData);
 	var prioVis = new PrioVis("priovis", allData, metaData);
 
@@ -65,6 +66,10 @@ function createVis(error, perDayData, metaData){
 	// (5) Bind event handler
 	
 	// *** TO-DO ***
-    // $(MyEventHandler).bind("selectionChanged", function(event, rangeStart, rangeEnd){ ...
+    $(eventHandler).bind("selectionChanged", function(event, rangeStart, rangeEnd){
+    	ageVis.onSelectionChange(rangeStart, rangeEnd);
+    	prioVis.onSelectionChange(rangeStart, rangeEnd);
+		countVis.onSelectionChange(rangeStart, rangeEnd);
+	});
 
 }
