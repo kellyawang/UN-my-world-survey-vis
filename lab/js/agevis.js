@@ -106,8 +106,8 @@ AgeVis.prototype.wrangleData = function(){
 
 	// Iterate over each day and accumulate values for each age - use vis.filteredData
     //
-    console.log("agevis filteredData:")
-    console.log( vis.filteredData );
+    // console.log("agevis filteredData:")
+    // console.log( vis.filteredData );
 	vis.filteredData.forEach(function(day) {
 	    d3.range(0,99).forEach(function(i) {
 	        votesPerAge[i] += day.ages[i]

@@ -158,8 +158,8 @@ PrioVis.prototype.onSelectionChange = function(selectionStart, selectionEnd){
 	var vis = this;
 
     // Filter original unfiltered data depending on selected time period (brush)
-    console.log("selection Start: " + selectionStart);
-    console.log("selection End: " + selectionEnd);
+    // console.log("selection Start: " + selectionStart);
+    // console.log("selection End: " + selectionEnd);
 
     // *** TO-DO ***
     vis.filteredData = vis.data

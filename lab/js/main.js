@@ -45,8 +45,8 @@ function createVis(error, perDayData, metaData){
 		return result;
 	});
 
-	console.log("All Data:")
-	console.log(allData)
+	// console.log("All Data:")
+	// console.log(allData)
 
 	// (3) Create event handler
 	var eventHandler = {};
@@ -55,7 +55,6 @@ function createVis(error, perDayData, metaData){
 	// "Context" visualization
 	var countVis = new CountVis("countvis", allData, eventHandler);
 
-	// *** TO-DO ***
 	//  pass event handler to CountVis, at constructor of CountVis above
 
 	// "Focus" visualizations - visualizations that should respond following changes in the Context vis

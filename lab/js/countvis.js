@@ -102,7 +102,6 @@ CountVis.prototype.initVis = function(){
 			// translate it to Dates using the vis.x scale
 			// invert() function returns the corresponding domain value of the x scale (Date) given a value from the range
 			vis.currentBrushRegion = d3.event.selection;
-			console.log(vis.currentBrushRegion);
 			vis.currentBrushRegion = vis.currentBrushRegion.map(vis.x.invert);
 
 			// Trigger the event 'selectionChanged' of our event handler
@@ -114,16 +113,23 @@ CountVis.prototype.initVis = function(){
 		.attr("class", "brush")
 
 	// Add zoom component
-	// *** TO-DO ***
-	//
-	// vis.xOrig = vis.x; // save original scale
-	//
-	// vis.zoomFunction = function() {...} // function that is being called when user zooms
-	//
-	// vis.zoom = d3.zoom()
-	//		.on("zoom", vis.zoomFunction);
-	//		.scaleExtent([1,20]);
-	//
+	vis.xOrig = vis.x; // save original scale
+
+	// function that is being called when user zooms
+	vis.zoomFunction = function() {
+		var xScaleModified = d3.event.transform.rescaleX(vis.xOrig);
+		vis.x = xScaleModified;
+
+		if(vis.currentBrushRegion) {
+			vis.brushGroup.call(vis.brush.move, vis.currentBrushRegion.map(vis.x));
+		}
+
+		vis.updateVis();
+	}
+
+	vis.zoom = d3.zoom()
+		.on("zoom", vis.zoomFunction)
+		.scaleExtent([1,20]);
 
 	// disable mousedown and drag in zoom, when you activate zoom (by .call)
 	// *** TO-DO ***
@@ -157,8 +163,12 @@ CountVis.prototype.wrangleData = function(){
 CountVis.prototype.updateVis = function(){
 	var vis = this;
 
+	console.log("about to call vis zoom")
 	// Call brush component here
 	vis.brushGroup.call(vis.brush);
+	vis.brushGroup.call(vis.zoom)
+		.on("mousedown.zoom", null)
+		.on("touchstart.zoom", null);
 
 	// Call the area function and update the path
 	// D3 uses each data point and passes it to the area function.
@@ -174,10 +184,12 @@ CountVis.prototype.updateVis = function(){
 	vis.svg.select(".y-axis").call(vis.yAxis);
 }
 
+/*
+ On selection change, the timeline labels should change according to the brushed selection
+ */
 CountVis.prototype.onSelectionChange = function(selectionStart, selectionEnd) {
 	var vis = this;
-	console.log("vis x domain:")
-	console.log(vis.x.domain())
+
 	d3.select("#timeLabel-min").text(dateFormatter(selectionStart));
 	d3.select("#timeLabel-max").text(dateFormatter(selectionEnd));
 }
