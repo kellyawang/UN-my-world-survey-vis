@@ -34,9 +34,13 @@ CountVis.prototype.initVis = function(){
 			.attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
 
-	// SVG clipping path
-	// ***TO-DO***
-
+	// Define the SVG clipping path to cover the entire svg region
+	vis.svg.append("defs")
+		.append("clipPath")
+		.attr("id", "clip")
+		.append("rect")
+		.attr("width", vis.width)
+		.attr("height", vis.height);
 
     // Scales and axes
     vis.x = d3.scaleTime()
@@ -92,7 +96,6 @@ CountVis.prototype.initVis = function(){
 	d3.select("#timeLabel-max").text(dateFormatter(vis.x.domain()[1]));
 
 	// Initialize brushing component
-	// *** TO-DO ***
 	vis.currentBrushRegion = null;
 	vis.brush = d3.brushX()
 		.extent([ [0,0], [vis.width, vis.height] ])
@@ -132,7 +135,9 @@ CountVis.prototype.initVis = function(){
 		.scaleExtent([1,20]);
 
 	// disable mousedown and drag in zoom, when you activate zoom (by .call)
-	// *** TO-DO ***
+	vis.brushGroup.call(vis.zoom)
+		.on("mousedown.zoom", null)
+		.on("touchstart.zoom", null);
 
 	// (Filter, aggregate, modify data)
 	vis.wrangleData();
@@ -163,12 +168,9 @@ CountVis.prototype.wrangleData = function(){
 CountVis.prototype.updateVis = function(){
 	var vis = this;
 
-	console.log("about to call vis zoom")
+	console.log("about to call vis brush")
 	// Call brush component here
 	vis.brushGroup.call(vis.brush);
-	vis.brushGroup.call(vis.zoom)
-		.on("mousedown.zoom", null)
-		.on("touchstart.zoom", null);
 
 	// Call the area function and update the path
 	// D3 uses each data point and passes it to the area function.
