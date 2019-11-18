@@ -81,12 +81,8 @@ PrioVis.prototype.wrangleData = function(){
 
 	// Create a sequence from 0 - 14 (priorities: 1-15; array length: 15), initialize values to 0
     var votesPerPriority = d3.range(0, 15).map(() => 0);
-    // console.log("votes per priority:")
-    // console.log(votesPerPriority)
 
 	// Aggregate over priorities, iterate over all data
-    // console.log("priovis filteredData:")
-    // console.log( vis.filteredData );
     vis.filteredData.forEach(function(day) {
         d3.range(0,15).forEach(function(i) {
             votesPerPriority[i] += day.priorities[i]
@@ -138,9 +134,6 @@ PrioVis.prototype.updateVis = function(){
     // Call axis function with the new domain
     vis.svg.select(".y-axis").call(vis.yAxis);
 
-    // console.log("vis metadata")
-    // console.log(vis.metaData.priorities[0])
-
     vis.svg.select(".x-axis").call(vis.xAxis)
         .selectAll("text")
         .style("text-anchor", "end")
@@ -150,7 +143,6 @@ PrioVis.prototype.updateVis = function(){
             return "rotate(-45)"
         });
 
-    //console.log(vis.metaData);
 }
 
 

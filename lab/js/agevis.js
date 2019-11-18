@@ -33,8 +33,6 @@ AgeVis.prototype.initVis = function(){
         .append("g")
         .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
-
-
     // Scales and axes
     vis.x = d3.scaleLinear()
         .range([0, vis.width])
