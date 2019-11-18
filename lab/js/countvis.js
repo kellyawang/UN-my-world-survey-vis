@@ -107,6 +107,11 @@ CountVis.prototype.initVis = function(){
 			vis.currentBrushRegion = d3.event.selection;
 			vis.currentBrushRegion = vis.currentBrushRegion.map(vis.x.invert);
 
+			// var selectionRange = d3.brushSelection(d3.select(".brush").node());
+			// var selectionDomain = selectionRange.map(vis.x.invert);
+			//
+			// vis.x.domain(selectionDomain)
+
 			// Trigger the event 'selectionChanged' of our event handler
 			$(vis.eventHandler).trigger("selectionChanged", vis.currentBrushRegion);
 		})
@@ -120,14 +125,16 @@ CountVis.prototype.initVis = function(){
 
 	// function that is being called when user zooms
 	vis.zoomFunction = function() {
-		var xScaleModified = d3.event.transform.rescaleX(vis.xOrig);
-		vis.x = xScaleModified;
+		vis.x = d3.event.transform.rescaleX(vis.xOrig);
+		vis.xAxis.scale(vis.x);
+		// vis.x = xScaleModified;
 
 		if(vis.currentBrushRegion) {
+			console.log("updated again...")
 			vis.brushGroup.call(vis.brush.move, vis.currentBrushRegion.map(vis.x));
+			vis.updateVis();
 		}
-
-		vis.updateVis();
+		// vis.updateVis();
 	}
 
 	vis.zoom = d3.zoom()
@@ -180,8 +187,9 @@ CountVis.prototype.updateVis = function(){
 			.attr("d", vis.area)
         .attr("clip-path", "url(#clip)");
 
+	console.log(`Updated Domain: ${vis.x.domain()[0]} - ${vis.x.domain()[1]}`)
 
-	// Call axis functions with the new domain 
+	// Call axis functions with the new domain
 	vis.svg.select(".x-axis").call(vis.xAxis);
 	vis.svg.select(".y-axis").call(vis.yAxis);
 }
@@ -195,3 +203,9 @@ CountVis.prototype.onSelectionChange = function(selectionStart, selectionEnd) {
 	d3.select("#timeLabel-min").text(dateFormatter(selectionStart));
 	d3.select("#timeLabel-max").text(dateFormatter(selectionEnd));
 }
+
+// CountVis.prototype.onButtonClicked = function() {
+// 	var vis = this;
+//
+//
+// }

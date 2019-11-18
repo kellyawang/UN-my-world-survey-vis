@@ -52,6 +52,7 @@ h2 {
 	fill: #93bebf;
 }
 
+/* Reference: https://css-tricks.com/styling-underlines-web/ */
 .timeLabel {
 	padding: 0px 10px;
 	text-decoration: underline;

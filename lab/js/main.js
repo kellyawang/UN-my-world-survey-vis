@@ -45,9 +45,6 @@ function createVis(error, perDayData, metaData){
 		return result;
 	});
 
-	// console.log("All Data:")
-	// console.log(allData)
-
 	// (3) Create event handler
 	var eventHandler = {};
 
@@ -61,10 +58,7 @@ function createVis(error, perDayData, metaData){
     var ageVis = new AgeVis("agevis", allData);
 	var prioVis = new PrioVis("priovis", allData, metaData);
 
-
 	// (5) Bind event handler
-	
-	// *** TO-DO ***
     $(eventHandler).bind("selectionChanged", function(event, rangeStart, rangeEnd){
     	ageVis.onSelectionChange(rangeStart, rangeEnd);
     	prioVis.onSelectionChange(rangeStart, rangeEnd);
