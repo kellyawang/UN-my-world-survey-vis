@@ -1,4 +1,5 @@
 # UN-my-world-survey-vis
+Lab work for CS171 course in Data Visualization with D3, taught at the Harvard Extension School.
 
 ### Lab 9 
 November 17, 2019
